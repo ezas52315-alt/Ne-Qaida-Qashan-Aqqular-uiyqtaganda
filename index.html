@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Мұқағали Мақатаев "Аққулар ұйықтағанда" - Не? Қайда? Қашан?</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Roboto:wght@300;400;500&display=swap');
+
+        :root {
+            --theatre-red: #5e0b0b;
+            --theatre-dark: #0a0a12;
+            --gold: #ffd700;
+            --wood-brown: #5e3b18;
+            --felt-green: #0e5c35;
+            --holo-glow: #2e8b57;
+            --holo-bg: rgba(46, 139, 87, 0.1);
+        }
+
+        body {
+            background-color: var(--theatre-dark);
+            background-image: radial-gradient(circle at 50% 50%, #1a1a2e 0%, #000 100%);
+            color: #f3f3f3;
+            font-family: 'Playfair Display', serif;
+            overflow: hidden;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* HEADER SECTION */
+        .header-section {
+            width: 100%;
+            height: 80px; /* Reduced slightly to give more room */
+            position: relative;
+            z-index: 50;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(to bottom, #000, transparent);
+            padding-top: 5px;
+        }
+
+        .main-title {
+            font-family: 'Cinzel', serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: transparent;
+            background: linear-gradient(to bottom, #ffd700, #b8860b, #ffd700);
+            -webkit-background-clip: text;
+            background-clip: text;
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            line-height: 1;
+            z-index: 60;
+        }
+
+        .sub-title {
+            font-family: 'Roboto', sans-serif;
+            font-size: 0.9rem;
+            color: #ccc;
+            margin-top: 2px;
+            letter-spacing: 1px;
+            z-index: 60;
+        }
+
+        /* Curtain */
+        .curtain-container {
+            position: absolute;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 40;
+            pointer-events: none;
+        }
+        .curtain-left, .curtain-right {
+            position: absolute;
+            top: 0;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(to bottom, var(--theatre-red), #3a0000);
+            box-shadow: inset -10px 0 20px rgba(0,0,0,0.5);
+            border-bottom: 3px solid var(--gold);
+        }
+        .curtain-left { left: 0; border-bottom-right-radius: 50% 20px; transform-origin: top left; }
+        .curtain-right { right: 0; border-bottom-left-radius: 50% 20px; transform-origin: top right; }
+
+        /* MAIN LAYOUT */
+        .game-layout {
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+            width: 100%;
+            padding: 10px;
+            gap: 10px;
+        }
+
+        @media (min-width: 1024px) {
+            .game-layout {
+                flex-direction: row;
+                align-items: center;
+                justify-content: center;
+                padding: 20px;
+                gap: 20px;
+            }
+        }
+
+        /* --- TV SECTION (RESIZED LARGER) --- */
+        .tv-section {
+            width: 100%;
+            height: 45%; /* Increased height on mobile */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            z-index: 30;
+        }
+
+        @media (min-width: 1024px) {
+            .tv-section {
+                width: 50%; /* Increased width on desktop (was 40%) */
+                height: 100%;
+                justify-content: center;
+                perspective: 1000px;
+            }
+        }
+
+        /* Hologram Frame - Bigger Max Width */
+        .hologram-frame {
+            position: relative;
+            width: 95%;
+            max-width: 750px; /* Increased from 550px */
+            aspect-ratio: 16/9;
+            border: 8px solid var(--wood-brown);
+            box-shadow: 
+                0 0 15px var(--felt-green),
+                inset 0 0 30px rgba(14, 92, 53, 0.5);
+            background: rgba(10, 20, 10, 0.9);
+            backdrop-filter: blur(5px);
+            border-radius: 15px;
+            overflow: hidden;
+            transform: rotateY(5deg); /* Reduced angle for better readability */
+            transition: transform 0.3s ease;
+        }
+
+        .hologram-frame::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-image: 
+                linear-gradient(rgba(46, 139, 87, 0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(46, 139, 87, 0.1) 1px, transparent 1px);
+            background-size: 20px 20px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .hologram-frame::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(to bottom, transparent 50%, rgba(46, 139, 87, 0.05) 51%, transparent 52%);
+            background-size: 100% 8px;
+            animation: holoScan 6s linear infinite;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        @keyframes holoScan {
+            0% { background-position: 0 0; }
+            100% { background-position: 0 100%; }
+        }
+
+        .holo-content {
+            position: relative;
+            z-index: 2;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 15px; /* Reduced padding to maximize space */
+        }
+
+        .holo-text {
+            color: #e0e0e0;
+            text-shadow: 0 1px 2px #000;
+        }
+
+        .city-tag {
+            background: linear-gradient(to right, var(--wood-brown), var(--felt-green));
+            color: #fff;
+            border: 1px solid #ffd700;
+            padding: 4px 15px;
+            font-family: 'Roboto', sans-serif;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+            border-radius: 4px;
+        }
+
+        /* --- TABLE SECTION --- */
+        .table-section {
+            width: 100%;
+            height: 55%;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        @media (min-width: 1024px) {
+            .table-section {
+                width: 50%; /* Reduced width on desktop (was 60%) */
+                height: 100%;
+            }
+        }
+
+        /* Round Table - slightly smaller to fit layout */
+        .round-table {
+            width: 280px;
+            height: 280px;
+            background: radial-gradient(circle, var(--felt-green) 30%, #05331e 100%);
+            border-radius: 50%;
+            border: 15px solid var(--wood-brown);
+            box-shadow: 
+                0 0 0 5px #3e260e, 
+                0 30px 60px rgba(0,0,0,0.8), 
+                inset 0 0 60px rgba(0,0,0,0.8);
+            position: relative;
+        }
+
+        @media (min-width: 768px) {
+            .round-table {
+                width: 480px;
+                height: 480px;
+                border-width: 25px;
+            }
+        }
+
+        /* Envelopes */
+        .envelope {
+            position: absolute;
+            width: 40px;
+            height: 28px;
+            background: #f8f8f8;
+            border: 1px solid #ccc;
+            box-shadow: 2px 2px 4px rgba(0,0,0,0.4);
+            top: 50%;
+            left: 50%;
+            z-index: 10;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 10px;
+            color: #888;
+        }
+        .envelope::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 50%;
+            border-bottom: 1px solid #ddd;
+            background: linear-gradient(to bottom right, transparent 48%, #ddd 50%, transparent 52%);
+        }
+        .active-envelope {
+            background: #fffacd;
+            box-shadow: 0 0 15px #ffd700;
+            z-index: 12;
+            transform: scale(1.3) !important;
+            border-color: gold;
+        }
+
+        /* Arrow Mechanism */
+        .arrow-wrapper {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            z-index: 20;
+        }
+
+        .spinner-arrow {
+            width: 260px;
+            height: 260px;
+            position: absolute;
+            top: -130px;
+            left: -130px;
+            pointer-events: none;
+            transition: transform 4s cubic-bezier(0.2, 0.8, 0.2, 1.0);
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+        }
+
+        .arrow-graphic {
+            width: 130px;
+            height: 14px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            filter: drop-shadow(3px 3px 3px rgba(0,0,0,0.5));
+        }
+
+        .arrow-shaft {
+            flex-grow: 1;
+            height: 6px;
+            background: linear-gradient(to bottom, #b8860b, #ffd700, #b8860b);
+            border-radius: 2px;
+            margin-left: 20px;
+        }
+
+        .arrow-tip {
+            width: 0;
+            height: 0;
+            border-top: 12px solid transparent;
+            border-bottom: 12px solid transparent;
+            border-left: 25px solid #ffd700;
+        }
+
+        .center-hub {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 30px;
+            height: 30px;
+            background: radial-gradient(circle, #ffd700, #8b4513);
+            border-radius: 50%;
+            border: 2px solid #fff;
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+            z-index: 25;
+        }
+
+        /* UI Buttons & Text */
+        .gold-btn {
+            background: linear-gradient(to bottom, #5e3b18, #3e260e);
+            color: #ffd700;
+            border: 1px solid #ffd700;
+            padding: 8px 25px;
+            font-weight: bold;
+            font-family: 'Roboto', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-radius: 4px;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+            margin-top: 5px;
+            transition: all 0.3s;
+        }
+        .gold-btn:hover { 
+            background: linear-gradient(to bottom, #7a4e23, #5e3b18);
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
+        }
+
+        .timer-badge {
+            width: 40px;
+            height: 40px;
+            border: 2px solid var(--gold);
+            color: var(--gold);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1rem;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(0,0,0,0.6);
+            box-shadow: 0 0 10px var(--gold);
+        }
+        
+    </style>
+</head>
+<body>
+
+    <!-- Header Fixed Top -->
+    <div class="header-section">
+        <div class="curtain-container">
+            <div class="curtain-left"></div>
+            <div class="curtain-right"></div>
+        </div>
+        <h1 class="main-title text-xl md:text-4xl">
+            НЕ? ҚАЙДА? ҚАШАН?
+        </h1>
+        <p class="sub-title text-xs md:text-lg">
+            Мұқағали Мақатаев: "Аққулар ұйықтағанда"
+        </p>
+    </div>
+
+    <div class="game-layout">
+        
+        <!-- LEFT: Hologram TV -->
+        <div class="tv-section">
+            <div class="hologram-frame">
+                <div class="holo-content">
+                    
+                    <!-- Start Screen -->
+                    <div id="start-screen" class="text-center w-full">
+                        <i class="fas fa-play-circle text-6xl text-yellow-500 mb-4 cursor-pointer hover:scale-110 transition animate-pulse" onclick="startGame()"></i>
+                        <h3 class="text-yellow-200 text-lg tracking-widest uppercase font-bold">Ойынды бастау</h3>
+                    </div>
+
+                    <!-- Game UI -->
+                    <div id="game-ui" class="hidden w-full h-full flex flex-col items-center justify-center relative">
+                        <div class="timer-badge hidden" id="timer">60</div>
+                        
+                        <div class="w-full text-center flex-grow flex flex-col justify-center overflow-hidden">
+                            <div id="city-info" class="city-tag inline-block mx-auto mb-2 hidden">
+                                <!-- City info -->
+                            </div>
+
+                            <div class="overflow-y-auto max-h-[300px] custom-scrollbar w-full px-2">
+                                <p id="question-display" class="holo-text font-serif text-lg md:text-2xl leading-relaxed whitespace-pre-line">
+                                    <!-- Question text -->
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="w-full flex flex-col items-center mt-2">
+                            <div id="answer-reveal" class="hidden bg-green-900 bg-opacity-80 p-2 rounded w-full border border-green-500 mb-2 text-center transform transition-all duration-500 shadow-[0_0_15px_rgba(0,255,0,0.3)]">
+                                <span class="text-green-300 text-xs font-bold block uppercase tracking-wider">Дұрыс жауап:</span>
+                                <span id="answer-text" class="text-white italic text-lg"></span>
+                            </div>
+
+                            <div class="flex gap-4">
+                                <button id="btn-answer" onclick="revealAnswer()" class="gold-btn hidden">Жауап</button>
+                                <button id="btn-next" onclick="nextRound()" class="gold-btn hidden">Келесі <i class="fas fa-chevron-right ml-1"></i></button>
+                            </div>
+                        </div>
+                        
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- RIGHT: Table -->
+        <div class="table-section">
+            <div class="round-table" id="round-table">
+                <!-- Center Mechanism -->
+                <div class="center-hub"></div>
+                
+                <!-- Arrow Wrapper (Centered) -->
+                <div class="arrow-wrapper">
+                    <div class="spinner-arrow" id="spinner">
+                        <div class="arrow-graphic">
+                            <div class="arrow-shaft"></div>
+                            <div class="arrow-tip"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Layers -->
+                <div id="envelopes-layer" class="absolute inset-0 pointer-events-none"></div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        /* === GAME DATA === */
+        const gameData = [
+            { type: 'intro', city: "Студия", author: "Жүргізуші", hostText: "Қайырлы күн! Бүгінгі ойын Мұқағали Мақатаевтың «Аққулар ұйықтағанда» поэмасына арналады. Біз 16 түрлі сұрақ дайындадық. Ойын ережесі: Бағдарша тоқтаған сұраққа жауап бересіздер.", question: "Қайырлы күн! Бүгінгі ойын Мұқағали Мақатаевтың «Аққулар ұйықтағанда» поэмасына арналады. Біз 16 түрлі сұрақ дайындадық.\n\nОйын ережесі: Бағдарша тоқтаған сұраққа жауап бересіздер.", answer: "", time: 0 },
+            
+            // Original Questions
+            { city: "Алматы", author: "Әдебиетші Асқар", hostText: "Сектор Алматы! Әдебиетші Асқар сұрайды: Поэмадағы оқиға өтетін көлдің ерекшелігі неде және ол қалай аталады?", question: "Сектор Алматы! Әдебиетші Асқар сұрайды:\n\nПоэмадағы оқиға өтетін көлдің ерекшелігі неде және ол қалай аталады?", answer: "Жетім көл. Себебі оған құятын немесе одан ағып шығатын өзен жоқ.", time: 60 },
+            { city: "Семей", author: "Оқушы Айдос", hostText: "Сектор Семей! Оқушы Айдос білгісі келеді: Аққулардың қауырсынын тарайтын тұмсығы қандай затқа теңеледі?", question: "Сектор Семей! Оқушы Айдос білгісі келеді:\n\nАққулардың қауырсынын тарайтын тұмсығы қандай затқа теңеледі?", answer: "Тарақ.", time: 60 },
+            { city: "Атырау", author: "Кітапханашы Зере", hostText: "Сектор Атырау! Кітапханашы Зере сұрайды: Күйеуінің қандай сөздері ананың шешім қабылдауына себеп болды?", question: "Сектор Атырау! Кітапханашы Зере сұрайды:\n\nКүйеуінің қандай сөздері ананың шешім қабылдауына себеп болды?", answer: "«Балам өлсе, бақыттың керегі не? Жалғыз ұлдан артық па, жалған бәрі!»", time: 60 },
+            { city: "Шымкент", author: "Студент Ермек", hostText: "Сектор Шымкент! Студент Ермек сұрағы: Ананың көз алдына елестеген «сыңар қанат, сынық құс» нені білдіреді?", question: "Сектор Шымкент! Студент Ермек сұрағы:\n\nАнаның көз алдына елестеген «сыңар қанат, сынық құс» нені білдіреді?", answer: "Ананың өзін (Жаралы аққу). Өлі аққу – баласы.", time: 60 },
+            { city: "Астана", author: "Қали ақсақал", hostText: "Сектор Астана! Қали ақсақал сұрайды: Жылқышы қарт ананы көргенде, қандай ырым туралы сұрады?", question: "Сектор Астана! Қали ақсақал сұрайды:\n\nЖылқышы қарт ананы көргенде, қандай ырым туралы сұрады?", answer: "«Саусағыңды қанаттың ба?» (Қан шығардың ба?).", time: 60 },
+            { city: "Түркістан", author: "Мұғалім Гүлнәр", hostText: "Сектор Түркістан! Мұғалім Гүлнәрдың сұрағы: Тәуіп шал баланы емдеу үшін қандай кеңес берген еді?", question: "Сектор Түркістан! Мұғалім Гүлнәрдың сұрағы:\n\nТәуіп шал баланы емдеу үшін қандай кеңес берген еді?", answer: "Аққумен баланы аластауды.", time: 60 },
+
+            // POETRY PAUSE
+            { type: 'poetry', city: "Поэзия минуты", author: "Мұқағали Мақатаев", hostText: "Ойын арасында ақынның табиғатты суреттеген сырлы шумағына құлақ түрейік...", question: "Ойын арасында ақынның табиғатты суреттеген сырлы шумағына құлақ түрейік:\n\n«Өзен де жоқ сыймаған арнасына,\nЖылға да жоқ даламен жалғасуға.\nТаста тұнған жаңбырдың тамшысындай,\nҚалай біткен мына көл тау басына?!»", answer: "", time: 0 },
+
+            // NEW 10 QUESTIONS
+            { city: "Қызылорда", author: "Ақын Болат", hostText: "Сектор Қызылорда! Ақын Болат сұрайды: Таң атып, аққулар оянғанда табиғатта қандай өзгеріс болады?", question: "Сектор Қызылорда! Ақын Болат сұрайды:\n\nТаң атып, аққулар оянғанда табиғатта қандай өзгеріс болады?", answer: "Тіріледі. Бұлбұл сайрап, тау басы алаумен боялады.", time: 60 },
+            { city: "Орал", author: "Эколог Сәуле", hostText: "Сектор Орал! Эколог Сәуле сұрайды: Аққулар көлге алғаш келгенде бірден қонды ма?", question: "Сектор Орал! Эколог Сәуле сұрайды:\n\nАққулар көлге алғаш келгенде бірден қонды ма?", answer: "Бірден қонбады. Алдымен шыр айналып, барлап барып қонды.", time: 60 },
+            { city: "Ақтау", author: "Тарихшы Нұрлан", hostText: "Сектор Ақтау! Тарихшы Нұрлан сұрайды: Ұрпақтан ұрпаққа жалғасқан қандай дәстүр туралы айтылады?", question: "Сектор Ақтау! Тарихшы Нұрлан сұрайды:\n\nҰрпақтан ұрпаққа жалғасқан қандай дәстүр туралы айтылады?", answer: "«Жатқа да дастарқан жайған» (Қонақжайлылық көрсетіп, аққуға тиіспеген).", time: 60 },
+            { city: "Көкшетау", author: "Суретші Анар", hostText: "Сектор Көкшетау! Суретші Анардың сұрағы: Оқиға болатын түні таудың бейнесі неге теңеледі?", question: "Сектор Көкшетау! Суретші Анардың сұрағы:\n\nОқиға болатын түні таудың бейнесі неге теңеледі?", answer: "Салбыраған шымылдыққа.", time: 60 },
+            { city: "Тараз", author: "Дәрігер Қанат", hostText: "Сектор Тараз! Дәрігер Қанат сұрайды: Ана іштей арпалысып отырып, «Жетім көлге» қай уақытта баруды ұйғарды?", question: "Сектор Тараз! Дәрігер Қанат сұрайды:\n\nАна іштей арпалысып отырып, «Жетім көлге» қай уақытта баруды ұйғарды?", answer: "Таң жамылып (Таң атқанша).", time: 60 },
+            { city: "Қарағанды", author: "Геолог Серік", hostText: "Сектор Қарағанды! Геолог Серік сұрайды: Мылтық атылған сәтте табиғат қалай түршікті?", question: "Сектор Қарағанды! Геолог Серік сұрайды:\n\nМылтық атылған сәтте табиғат қалай түршікті?", answer: "Жер айналып, тау құлап, аспан көшкендей болды.", time: 60 },
+            { city: "Өскемен", author: "Орманшы Виктор", hostText: "Сектор Өскемен! Орманшы Виктор сұрайды: Аман қалған аққулар қай тарапқа бет алды?", question: "Сектор Өскемен! Орманшы Виктор сұрайды:\n\nАман қалған аққулар қай тарапқа бет алды?", answer: "Батысқа.", time: 60 },
+            { city: "Жезқазған", author: "Металлург Бақыт", hostText: "Сектор Жезқазған! Металлург Бақыт сұрайды: Жылқышы қарт ананың қолындағы мылтықты не істеуді бұйырды?", question: "Сектор Жезқазған! Металлург Бақыт сұрайды:\n\nЖылқышы қарт ананың қолындағы мылтықты не істеуді бұйырды?", answer: "Көлге лақтыруды.", time: 60 },
+            { city: "Талдықорған", author: "Психолог Әлия", hostText: "Сектор Талдықорған! Психолог Әлия сұрайды: Есі ауысқан ана үйіне келгенде, ақ төсекті не деп ойлады?", question: "Сектор Талдықорған! Психолог Әлия сұрайды:\n\nЕсі ауысқан ана үйіне келгенде, ақ төсекті не деп ойлады?", answer: "Аппақ айдынға (көлге).", time: 60 },
+            { city: "Павлодар", author: "Ботаник Елена", hostText: "Сектор Павлодар! Ботаник Елена сұрайды: Эпилогта аққулар кеткен соң, көл жағасын не басып кеткені айтылады?", question: "Сектор Павлодар! Ботаник Елена сұрайды:\n\nЭпилогта аққулар кеткен соң, көл жағасын не басып кеткені айтылады?", answer: "Жасыл жалбыз (жалбыз шөбі).", time: 60 },
+
+            { type: 'outro', city: "Студия", author: "Жүргізуші", hostText: "Ойын аяқталды. Мұқағали Мақатаевтың поэмасын тағы мұқият оқып шығыңыздар. Сау болыңыздар. Келесі ойында кездескенше!", question: "Ойын аяқталды! Мұқағали Мақатаевтың поэмасын тағы мұқият оқып шығыңыздар.\n\nСау болыңыздар.\nКелесі ойында кездескенше!", answer: "", time: 0 }
+        ];
+
+        /* === INITIALIZATION === */
+        let currentRotation = 0; 
+        let currentRound = 0;
+        let timerInterval;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            setupEnvelopes();
+        });
+
+        function setupEnvelopes() {
+            const container = document.getElementById('envelopes-layer');
+            const questions = gameData.filter(d => d.type !== 'intro' && d.type !== 'outro' && d.type !== 'poetry');
+            const total = questions.length;
+            const radius = window.innerWidth < 768 ? 100 : 190;
+
+            for(let i=0; i<total; i++) {
+                const env = document.createElement('div');
+                env.className = 'envelope';
+                env.id = `envelope-${i}`;
+                env.innerText = i + 1;
+                const angle = i * (360 / total);
+                env.style.transform = `translate(-50%, -50%) rotate(${angle}deg) translateY(-${radius}px)`;
+                container.appendChild(env);
+            }
+        }
+
+        /* === GAME LOGIC === */
+        function startGame() {
+            document.getElementById('start-screen').classList.add('hidden');
+            document.getElementById('game-ui').classList.remove('hidden');
+            loadRound(0);
+        }
+
+        function loadRound(index) {
+            currentRound = index;
+            const data = gameData[index];
+            
+            // Reset UI
+            document.getElementById('answer-reveal').classList.add('hidden');
+            document.getElementById('btn-next').classList.add('hidden');
+            document.getElementById('btn-answer').classList.add('hidden');
+            document.getElementById('timer').classList.add('hidden');
+            document.getElementById('city-info').classList.add('hidden');
+            document.getElementById('question-display').innerText = ""; // Clear text
+            clearInterval(timerInterval);
+
+            // LOGIC
+            if (index === 0) {
+                // INTRO: Show immediately
+                showTextData(data);
+                document.getElementById('btn-next').classList.remove('hidden');
+            } 
+            else if (data.type === 'poetry') {
+                // POETRY: No spin, just show
+                showTextData(data);
+                document.getElementById('btn-next').classList.remove('hidden');
+            }
+            else if (data.type === 'outro') {
+                // OUTRO: Show immediately
+                showTextData(data);
+            }
+            else {
+                // GAME ROUND: Spin first
+                const questionIndex = gameData.slice(0, index).filter(d => d.type !== 'intro' && d.type !== 'poetry').length;
+                
+                // Show "Spinning" state
+                document.getElementById('question-display').innerHTML = "<i class='fas fa-sync fa-spin mr-2'></i> Сектор таңдалуда...";
+                
+                // Spin Arrow
+                spinArrow(questionIndex);
+                
+                // Wait for spin (4s)
+                setTimeout(() => {
+                    showTextData(data);
+                    startTimer(data.time);
+                    document.getElementById('btn-answer').classList.remove('hidden');
+                }, 4000);
+            }
+        }
+
+        function showTextData(data) {
+            // City Info
+            const cityInfo = document.getElementById('city-info');
+            if(data.type !== 'intro' && data.type !== 'outro' && data.type !== 'poetry') {
+                cityInfo.innerText = `${data.city} | ${data.author}`;
+                cityInfo.classList.remove('hidden');
+            } else if (data.type === 'poetry') {
+                cityInfo.innerText = data.city;
+                cityInfo.classList.remove('hidden');
+            } else {
+                cityInfo.classList.add('hidden');
+            }
+
+            // Question Text
+            document.getElementById('question-display').innerText = data.question;
+        }
+
+        function spinArrow(envIndex) {
+            const totalEnvelopes = 16;
+            const envelopeAngle = envIndex * (360 / totalEnvelopes);
+            const targetAngle = envelopeAngle - 90;
+            const spinAmount = 360 * 4; 
+            
+            let nextRotation = Math.ceil(currentRotation / 360) * 360 + spinAmount + targetAngle;
+            if (nextRotation <= currentRotation) nextRotation += 360;
+
+            currentRotation = nextRotation;
+            
+            const arrow = document.getElementById('spinner');
+            if (arrow) arrow.style.transform = `rotate(${currentRotation}deg)`;
+            
+            // Highlight Envelope
+            setTimeout(() => {
+                document.querySelectorAll('.envelope').forEach(e => e.classList.remove('active-envelope'));
+                const env = document.getElementById(`envelope-${envIndex}`);
+                if(env) env.classList.add('active-envelope');
+            }, 4000);
+        }
+
+        function startTimer(seconds) {
+            const timerEl = document.getElementById('timer');
+            if (timerEl) {
+                timerEl.classList.remove('hidden');
+                timerEl.innerText = seconds;
+            }
+            
+            timerInterval = setInterval(() => {
+                seconds--;
+                if (timerEl) timerEl.innerText = seconds;
+                if (seconds <= 0) {
+                    clearInterval(timerInterval);
+                    revealAnswer(); 
+                }
+            }, 1000);
+        }
+
+        function revealAnswer() {
+            clearInterval(timerInterval);
+            const data = gameData[currentRound];
+            const answerText = document.getElementById('answer-text');
+            const answerReveal = document.getElementById('answer-reveal');
+            const btnAnswer = document.getElementById('btn-answer');
+            const btnNext = document.getElementById('btn-next');
+
+            if (answerText) answerText.innerText = data.answer;
+            if (answerReveal) answerReveal.classList.remove('hidden');
+            if (btnAnswer) btnAnswer.classList.add('hidden');
+            if (btnNext) btnNext.classList.remove('hidden');
+        }
+
+        function nextRound() {
+            if (currentRound < gameData.length - 1) {
+                loadRound(currentRound + 1);
+            }
+        }
+    </script>
+</body>
+</html>
